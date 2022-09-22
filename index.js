@@ -7,8 +7,10 @@ const Engineer = require('./lib/Engineer');
 
 let employeeArr = [];
 
-const questions = [
+function Menu () {
 
+    inquirer
+    .prompt ([
     {
         type:'input',
         name: 'name',
@@ -53,30 +55,9 @@ const questions = [
         choices: ["Manager", "Engineer","Intern"],
         name: "role",
         message:'What is your role?',
-      },
-];
+    }
+])
 
-function writeToFile(fileName, data) {
-    fs.writeFile(fileName, data, err => {
-        console.log(fileName);
+}
 
-        if (err) {
-            return console.log(err);
-        } else {
-            return console.log("Generated HTML file!");
-        }
-    })
-};
-
-
-  function init() {
-    inquirer
-        .prompt(questions)
-        .then((answers) => {
-            console.log(answers);
-            var html = answers;
-            writeToFile('./employee-information.html', html);
-        });
-};
-
-init ()
+Menu ()
