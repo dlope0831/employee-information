@@ -1,14 +1,14 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
 const Manager = require('./lib/Manager');
-// const Employee = require('../lib/Employee');
+const Employee = require('./lib/Employee');
+const Intern = require('./lib/Intern');
+const Engineer = require('./lib/Engineer');
 
-function Menu () {
-    this.employee = [];
-    this.currentEmployee;
+let employeeArr = [];
 
-    inquirer
-    .prompt ([
+const questions = [
+
     {
         type:'input',
         name: 'name',
@@ -53,33 +53,30 @@ function Menu () {
         choices: ["Manager", "Engineer","Intern"],
         name: "role",
         message:'What is your role?',
-    }
-])
-    .then((answers) => {
-        switch (answers.action) {
-            case "Manager": 
-            getRole(Manager); 
-            break;
+      },
+];
+
+function writeToFile(fileName, data) {
+    fs.writeFile(fileName, data, err => {
+        console.log(fileName);
+
+        if (err) {
+            return console.log(err);
+        } else {
+            return console.log("Generated HTML file!");
         }
     })
 };
 
 
-// function writeToFile(fileName, data) {
-//     fs.writeFile(fileName, data, err => {
-//         console.log(fileName);
+  function init() {
+    inquirer
+        .prompt(questions)
+        .then((answers) => {
+            console.log(answers);
+            var html = answers;
+            writeToFile('./employee-information.html', html);
+        });
+};
 
-//         if (err) {
-//             return console.log(err);
-//         } else {
-//             return console.log("Generated HTML file!");
-//         }
-//     })
-// };
-
-
-
-//quit option
-//push employee to store as an array
-//use array when generating the html ex = x.getRole()
-Menu()
+init ()
