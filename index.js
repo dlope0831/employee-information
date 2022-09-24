@@ -52,12 +52,69 @@ function Menu () {
     },
     {
         type:'checkbox',
-        choices: ["Manager", "Engineer","Intern"],
         name: "role",
         message:'What is your role?',
+        choices: [
+          "Manager", 
+          "Engineer",
+          "Intern",
+        ],   
     }
 ])
+.then (response => {
+  switch (response.role) {
+    case "Manager":
+      console.log('check')
+      displayManager (response);
+      break;
+    // case 'Engineer':
+    //   displayEngineer (response)
+    //   break;
+    default: console.log('check default')
+  }
+})
+};
 
+const displayManager = (info) => {
+  inquirer
+  .prompt ([
+  {
+      type:'input',
+      name: 'officeNumber',
+      message: 'What is your office number?',
+      validate: nameInput => {
+          if (nameInput) {
+            return true;
+          } else {
+            console.log('You need to enter your office number!');
+            return false;
+          }
+        }
+  }
+])
+.then (answer => {
+  var newManager = new Manager (info.name, info.id, info.email, answer.officeNumber)
+  employeeArr.push(newManager)
+  console.log(employeeArr);
+  generateHtml();
+})
 }
 
+const generateHtml = () => {
+  inquirer
+  .prompt ([
+  {
+      type:'confirm',
+      name: 'addEmployee',
+      message: 'Do you want to add a new employee?',
+  }
+])
+.then (answer => {
+if (answer.addEmployee === true) {
+  Menu()
+} else {
+console.log('End Program')
+}
+})
+}
 Menu ()
