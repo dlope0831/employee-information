@@ -1,5 +1,6 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
+
 const Manager = require('./lib/Manager');
 const Employee = require('./lib/Employee');
 const Intern = require('./lib/Intern');
@@ -51,7 +52,7 @@ function Menu () {
           }
     },
     {
-        type:'checkbox',
+        type:'list',
         name: "role",
         message:'What is your role?',
         choices: [
@@ -64,13 +65,16 @@ function Menu () {
 .then (response => {
   switch (response.role) {
     case "Manager":
-      console.log('check')
       displayManager (response);
       break;
-    // case 'Engineer':
-    //   displayEngineer (response)
-    //   break;
-    default: console.log('check default')
+    case 'Engineer':
+      displayEngineer (response)
+      break;
+    case 'Intern':
+      displayIntern (response);
+      break;
+    case 'Exit':
+      break;
   }
 })
 };
@@ -98,7 +102,56 @@ const displayManager = (info) => {
   console.log(employeeArr);
   generateHtml();
 })
-}
+};
+
+const displayEngineer = (info) => {
+  inquirer
+  .prompt ([
+  {
+      type:'input',
+      name: 'gitHub',
+      message: 'What is your GitHub username?',
+      validate: nameInput => {
+          if (nameInput) {
+            return true;
+          } else {
+            console.log('You need to enter your GitHub username!');
+            return false;
+          }
+        }
+  }
+])
+.then (answer => {
+  var newEngineer = new Engineer (info.name, info.id, info.email, answer.gitHub)
+  employeeArr.push(newEngineer)
+  console.log(employeeArr);
+  generateHtml();
+})
+};
+const displayIntern = (info) => {
+  inquirer
+  .prompt ([
+  {
+      type:'input',
+      name: 'school',
+      message: 'What is your school?',
+      validate: nameInput => {
+          if (nameInput) {
+            return true;
+          } else {
+            console.log('You need to enter your school!');
+            return false;
+          }
+        }
+  }
+])
+.then (answer => {
+  var newIntern = new Intern (info.name, info.id, info.email, answer.school)
+  employeeArr.push(newIntern)
+  console.log(employeeArr);
+  generateHtml();
+})
+};
 
 const generateHtml = () => {
   inquirer
@@ -113,8 +166,9 @@ const generateHtml = () => {
 if (answer.addEmployee === true) {
   Menu()
 } else {
-console.log('End Program')
+  
 }
 })
 }
+
 Menu ()
