@@ -6,6 +6,8 @@ const Employee = require('./lib/Employee');
 const Intern = require('./lib/Intern');
 const Engineer = require('./lib/Engineer');
 
+const generateExHtml = require('./src/page-template');
+
 let employeeArr = [];
 
 function Menu () {
@@ -152,7 +154,17 @@ const displayIntern = (info) => {
   generateHtml();
 })
 };
+function writeToFile(fileName, data) {
+  fs.writeFile(fileName, data, err => {
+      console.log(fileName);
 
+      if (err) {
+          return console.log(err);
+      } else {
+          return console.log("Generated html!");
+      }
+  })
+};
 const generateHtml = () => {
   inquirer
   .prompt ([
@@ -166,9 +178,12 @@ const generateHtml = () => {
 if (answer.addEmployee === true) {
   Menu()
 } else {
-  
+      console.log(answer);
+      var html = generateExHtml(answer);
+      console.log(html);
+      writeToFile('./ExampleHTML.css', html);
 }
-})
+    });
 }
 
 Menu ()
